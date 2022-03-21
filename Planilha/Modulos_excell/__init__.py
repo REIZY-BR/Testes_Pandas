@@ -1,5 +1,4 @@
 
-
 def marca(planilha, nome_marca):
     """
     :param planilha: banco de dados para ser analisado
@@ -17,7 +16,7 @@ def conta_marca(planilha):
     :return: uma lista com todas as marcas disponivel no banco de dados sem possiveis duplicatas
     """
     lista = list()
-    for nome in planilha["Marca"]:
+    for nome in planilha["MARCA"]:
         if nome not in lista:
             lista.append(nome)
     return lista
@@ -31,7 +30,7 @@ def top_marcas(planilha, lista_de_marcas, show=False):
     vendida
     :return: um dicionario formatado e organizado com as marcas selecionadas
     """
-    #criando uma lista com varias listas dentro contendo o nome da marca e quantidade vendida
+    # criando uma lista com varias listas dentro contendo o nome da marca e quantidade vendida
     dicionario = dict()
     for marca in lista_de_marcas:
         contador = 0
@@ -39,12 +38,12 @@ def top_marcas(planilha, lista_de_marcas, show=False):
             if nome == marca:
                 contador += int(planilha["QTD"][linha])
         dicionario[marca] = contador
-    #organizando o dicionario pela quantidade vendida
+    # organizando o dicionario pela quantidade vendida
     from typing import Dict, Any
     new_dicionario: dict[Any, int] = dict()
     for i in sorted(dicionario, key=dicionario.get, reverse=True):
         new_dicionario[i] = dicionario[i]
-    #mostrando o dicionario formatado
+    # mostrando o dicionario formatado
     if show:
         for chave, item in new_dicionario.items():
             print(f'|{chave:<20} = {item:>10}|')
@@ -58,29 +57,49 @@ def localiza_preco(caminho_ate_planilha, nome_marca):
     :return: o valor selecionado pelo usuario(permite guardar em uma variavel)
     """
     import pandas as pd
-    #Criando um banco de dados com o nome dos produtos
+    # Criando um banco de dados com o nome dos produtos
     banco_dados = pd.read_excel(rf'{caminho_ate_planilha}', sheet_name= nome_marca)
-    #Mostrando os produtos com indices a ser escolhido
+    # Mostrando os produtos com indices a ser escolhido
     print('-' * 40)
     for pos, produto in enumerate(banco_dados["PRODUTOS"]):
         print(f'|{pos}{produto:^40}{pos}|')
         print('-' * 40)
-    #perguntando ao usuario qual produto deseja ver o preço
+    # perguntando ao usuario qual produto deseja ver o preço
     while True:
         try:
             while True:
                 posicao_produto = int(input('Qual produto deseja vizualizar o preço?'))
-                if 0 < posicao_produto <= len(banco_dados["PRODUTOS"])-1:
+                if 0 < posicao_produto <= len(banco_dados["PRODUTOS"] ) -1:
                     break
                 else:
-                    print(f'ERRO, digite um número entre 0 e {len(banco_dados["PRODUTOS"])-1}!')
+                    print(f'ERRO, digite um número entre 0 e {len(banco_dados["PRODUTOS"] ) -1}!')
         except KeyboardInterrupt:
-            print('\n\033[31mO usuario interrompeu o programa!\033[m'*6)
+            print('\n\033[31mO usuario interrompeu o programa!\033[m ' *6)
         except:
-            print(f'ERRO, digite um número entre 0 e {len(banco_dados["PRODUTOS"])-1}!')
+            print(f'ERRO, digite um número entre 0 e {len(banco_dados["PRODUTOS"] ) -1}!')
         else:
             break
-    #apos achar o preço com o produto selecionado, printamos...
+    # apos achar o preço com o produto selecionado, printamos...
     preco = float(banco_dados["PRECOS"][posicao_produto])
     print(f'O preço do produto {banco_dados["PRODUTOS"][posicao_produto]} = R${preco:.2f}')
     return preco
+
+
+def pega_preco(caminho_ate_planilha, nome_marca, nome_produto):
+    """
+    :param caminho_ate_planilha: Onde a planilha principal esta localizada
+    :param nome_marca: Nome da marca do produto, é necessario um sheet=Nome da marca
+    :param nome_produto: Nome do produto da marca selecionada
+    :return: Uma mensagem de erro caso nao for encontrado ou o preço em float
+    """
+    import pandas as pd
+    quantidade_vendida = pd.read_excel(caminho_ate_planilha)
+    banco_dados = pd.read_excel(caminho_ate_planilha, sheet_name=nome_marca)
+    preco = 0
+    for indice, produto in enumerate(banco_dados["PRODUTOS"]):
+        if produto == nome_produto:
+            preco = banco_dados["PRECOS"][indice]
+    if pd.to_numeric(preco):
+        return float(preco)
+    else:
+        return print(f'\033[31mHouve um erro de leitura no produto {nome_marca, produto}\033[m')
