@@ -1,5 +1,5 @@
 # manipula_planilha
- Meus testes com manipulçao de planilha em Python com Frameworks
+ Meus testes com manipulaçao de planilha em Python com Frameworks
 ================ __init__===================
 #Estou treinando funçoes com este projeto que busca automatizar rotinas que faço em meu emprego atual
 
