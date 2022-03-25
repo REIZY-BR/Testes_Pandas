@@ -10,4 +10,6 @@
 -def top_marcas retorna um dicionario cuja a chave é o nome da marca e o valor a quantidade de produtos vendidos desta mesma marca(tudo em ordem de mais vendido para o menos)
 
 -def localiza_preco cria um banco de dados com os nomes dos produtos de uma marca e possibilita o usurio selecionar o preço de custo desse mesmo produto (def em andamento, em breve ele mesmo ira procurar e adicionar o preço automaticamente)
+
+-def pega_preco localiza o preço de custo de um produto e o retorna(função indispensavel para futuras outras funçoes)
 ========================EM ANDAMENTO=====================
